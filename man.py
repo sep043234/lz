@@ -1,11 +1,25 @@
 import asyncio
 import json
+import random
 import tempfile
 from pathlib import Path
 from telethon import TelegramClient
+from telethon.sessions import StringSession
 from telethon.errors.rpcerrorlist import ChatForwardsRestrictedError
 
-from lz_config import API_HASH, API_ID, USER_SESSION
+from man_config import API_HASH, API_ID, SESSION_STRING
+
+
+def _build_client() -> TelegramClient:
+	"""兼容 StringSession 与本地 .session 文件名两种输入。"""
+	raw = str(SESSION_STRING or "").strip()
+	api_id = int(API_ID)
+
+	# StringSession 通常是较长 token，不应被当作 sqlite 文件路径
+	if raw and len(raw) > 80 and not raw.endswith(".session") and "/" not in raw and "\\" not in raw:
+		return TelegramClient(StringSession(raw), api_id, API_HASH)
+
+	return TelegramClient(raw or "man", api_id, API_HASH)
 
 
 class GroupMediaForwarder:
@@ -17,6 +31,7 @@ class GroupMediaForwarder:
 		forward_to: str,
 		start_message_id: int = 1,
 		caption_json_mode: bool = False,
+		skip_caption_check: bool = False,
 		state_file: Path | None = None,
 		white_list_group_1: list[str] | None = None,
 		white_list_group_2: list[str] | None = None,
@@ -26,6 +41,7 @@ class GroupMediaForwarder:
 		self.forward_to = forward_to
 		self.default_start_message_id = start_message_id
 		self.caption_json_mode = caption_json_mode
+		self.skip_caption_check = skip_caption_check
 		self.state_file = state_file or Path(__file__).with_name("man_last_message_id.txt")
 		self.white_list_group_1 = white_list_group_1 or []
 		self.white_list_group_2 = white_list_group_2 or []
@@ -234,8 +250,12 @@ class GroupMediaForwarder:
 	# ── 核心异步方法 ──────────────────────────────────────────
 
 	async def fetch_messages(self, start_message_id: int, limit: int) -> list[dict]:
-		client = TelegramClient(USER_SESSION, API_ID, API_HASH)
+		client = _build_client()
 		await client.start()
+		me = await client.get_me()
+		print(f"已登入 Telegram 帳號：{me.username} (id={me.id})",flush=True)
+
+
 		try:
 			entity = await self._resolve_source_entity(client)
 			messages = []
@@ -251,12 +271,15 @@ class GroupMediaForwarder:
 			await client.disconnect()
 
 	async def fetch_and_forward(self, start_message_id: int) -> int:
-		client = TelegramClient(USER_SESSION, API_ID, API_HASH)
+		client = _build_client()
 		await client.start()
+		me = await client.get_me()
+		print(f"SESSION_READY 已登入 Telegram 帳號：{me.username} (id={me.id})", flush=True)
+		
 		try:
 			source_entity = await self._resolve_source_entity(client)
 			forward_entity = await client.get_entity(self.forward_to)
-			last_message_id = start_message_id
+			last_message_id = start_message_id - 1
 
 			async for message in client.iter_messages(
 				source_entity,
@@ -265,9 +288,15 @@ class GroupMediaForwarder:
 			):
 				last_message_id = message.id
 				text = self.serialize_message(message).get("text", "")
-				if self.is_blacklisted(text):
-					continue
-				if self.classify_text(text) in {"group_1", "group_2"}:
+
+				if self.skip_caption_check:
+					should_forward = True
+				else:
+					if self.is_blacklisted(text):
+						continue
+					should_forward = self.classify_text(text) in {"group_1", "group_2"}
+
+				if should_forward:
 					formatted_caption = self._format_caption(message, text)
 
 					if self.caption_json_mode:
@@ -281,17 +310,58 @@ class GroupMediaForwarder:
 							)
 						except ChatForwardsRestrictedError:
 							await self._resend_message(client, forward_entity, message, caption_override=formatted_caption)
-					self.write_last_message_id(message.id)
-					await asyncio.sleep(1)
+					await asyncio.sleep(random.randint(300, 1200))
+
+				# 不论是否转发，已检查过的消息都推进游标，避免重复检查旧消息
+				self.write_last_message_id(message.id)
 
 			return last_message_id
 		finally:
 			await client.disconnect()
 
+	async def wait_for_new_message(self, last_seen_message_id: int, poll_interval_sec: int = 5) -> int:
+		"""阻塞等待，直到 target_group 出现比 last_seen_message_id 更新的消息。"""
+		client = _build_client()
+		await client.start()
+		try:
+			source_entity = await self._resolve_source_entity(client)
+			while True:
+				latest_id = None
+				async for latest_msg in client.iter_messages(source_entity, limit=1):
+					latest_id = latest_msg.id
+					break
+
+				if latest_id is not None and latest_id > last_seen_message_id:
+					return latest_id
+
+				await asyncio.sleep(poll_interval_sec)
+		finally:
+			await client.disconnect()
+
+	async def has_messages_in_target_group(self) -> bool:
+		"""检查来源 target_group 是否至少有一条消息。"""
+		client = _build_client()
+		await client.start()
+		try:
+			source_entity = await self._resolve_source_entity(client)
+			async for _ in client.iter_messages(source_entity, limit=1):
+				return True
+			return False
+		finally:
+			await client.disconnect()
+
 	async def run(self) -> None:
-		start_message_id = self.resolve_start_message_id()
-		last_message_id = await self.fetch_and_forward(start_message_id)
-		print(last_message_id)
+		next_start_id = self.resolve_start_message_id()
+		print(f"[Run] 从 start_message_id={next_start_id} 开始检查。", flush=True)
+
+		while True:
+			last_checked_id = await self.fetch_and_forward(next_start_id)
+			print(f"[Done] 已检查到 message_id={last_checked_id}。进入等待新消息...", flush=True)
+
+			last_seen = max(last_checked_id, next_start_id - 1)
+			new_latest_id = await self.wait_for_new_message(last_seen)
+			next_start_id = last_seen + 1
+			print(f"[Wake] 检测到新消息 latest_id={new_latest_id}，从 message_id={next_start_id} 继续检查。", flush=True)
 
 
 # ── 实例配置 ──────────────────────────────────────────────────
@@ -301,6 +371,7 @@ forwarder = GroupMediaForwarder(
 	forward_to="ziyuanbudengbot",
 	start_message_id=0,
 	caption_json_mode=False,
+	skip_caption_check=False,
 	white_list_group_1=[
 		"时代峰峻","TF家族","佟弋","渣苏感","计铭浩","文铭","铭罕","刘瀚辰","穆祉丞","陈浚铭",
 		"陈思罕","张桂源","朱映宸","杨智岩","严浩翔","沈子航","智恩涵","朱广伦","萌娃","人类幼崽",
@@ -319,24 +390,14 @@ forwarder = GroupMediaForwarder(
 
 forwarder2 = GroupMediaForwarder(
 	target_group=7294369541,
-	forward_to="ziyuanbudengbot",
+	forward_to="Tin9HutBot",
 	start_message_id=0,
 	caption_json_mode=True,
-	white_list_group_1=[
-		"儿子","TF家族","佟弋","渣苏感","计铭浩","文铭","铭罕","刘瀚辰","穆祉丞","陈浚铭",
-		"陈思罕","张桂源","朱映宸","杨智岩","严浩翔","沈子航","智恩涵","朱广伦","萌娃","人类幼崽",
-		"男孩","小宝宝","小孩","韩维辰","星星贴纸","少年感","养成系","练习生","骗你生儿子",
-	],
-	white_list_group_2=[
-		"小男娘","正太","弟弟","初中","男初","南梁",
-	],
-	black_list=[
-		"白肥","狂野男孩","想法哭小正太","橘子海","巨乳","男同","小孩姐","小萝莉","腹肌体育生",
-		"蜜桃洨小孩","学妹","兵哥","18岁","19岁","遇上歹徒","大学生","薄肌男孩","男高","肌肉",
-		"GV","女儿","健身","男大","女初","绿帽癖","体院","羊毛卷","wataa","radewa","Haley",
-		"从地板干到落地窗",
-	],
+	skip_caption_check=True,
+	white_list_group_1=[],
+	white_list_group_2=[],
+	black_list=[],
 )
 
 if __name__ == "__main__":
-	asyncio.run(forwarder.run())
+	asyncio.run(forwarder2.run())
