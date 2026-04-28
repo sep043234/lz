@@ -1413,8 +1413,9 @@ async def handle_search_s(message: Message, state: FSMContext, command: Command 
 
 @router.message(Command("sub"))
 async def handle_sub(message: Message, state: FSMContext, command: Command = Command("sub")):
+    guider_bot_name = SharedConfig.get("guider_bot_name") or ""
     text = "有新资源就会发给你, 萨莱/岩仔/撸仔私信指令菜单使用\r\n"
-    text += "1️⃣ 私信小懒觉机器人 @xljdd013bot\r\n"
+    text += f"1️⃣ 私信小龙阳机器人 @{guider_bot_name}\r\n"
     text += "2️⃣ 机器人右下角指令菜单，选择订阅通知\r\n"   
     text += "🎈 只限小懒觉会员使用\r\n";
 
@@ -1422,7 +1423,7 @@ async def handle_sub(message: Message, state: FSMContext, command: Command = Com
         text=text,
         reply_markup=InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="🔔 订阅通知", url="https://t.me/xljdd013bot?start=subscribe")]
+                [InlineKeyboardButton(text="🔔 订阅通知", url=f"https://t.me/{guider_bot_name}?start=subscribe")]
             ]
         ),
     )

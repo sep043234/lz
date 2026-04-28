@@ -2791,23 +2791,23 @@ async def update_user_consecutive_days(user_id,product_info) -> Tuple[bool, Opti
             disable_web_page_preview=True,
         )
 
-        school_chat_id = -1001926574189
+        # school_chat_id = -1001926574189
                              
-        school_message_thread_id = 2120
+        # school_message_thread_id = 2120
 
-        print(f"{chat_incentive_text}", flush=True)
+        # print(f"{chat_incentive_text}", flush=True)
 
-        try:
-            await publish_bot.send_message(
-                chat_id=school_chat_id,
-                message_thread_id=school_message_thread_id,
-                parse_mode="html",
-                disable_web_page_preview=True,
-                text=chat_incentive_text,
-            )
-        except TelegramBadRequest as e:
-            # Group/thread may be unavailable; do not fail the background flow.
-            logging.warning("send incentive message to school chat failed: %s", e)
+        # try:
+        #     await publish_bot.send_message(
+        #         chat_id=school_chat_id,
+        #         message_thread_id=school_message_thread_id,
+        #         parse_mode="html",
+        #         disable_web_page_preview=True,
+        #         text=chat_incentive_text,
+        #     )
+        # except TelegramBadRequest as e:
+        #     # Group/thread may be unavailable; do not fail the background flow.
+        #     logging.warning("send incentive message to school chat failed: %s", e)
 
 
                
@@ -2974,8 +2974,6 @@ async def _publish_content_and_notify_owner(product_row,  send_only_ly=False):
     text = textwrap.dedent(f'''\
         ✅ 您的投稿内容「<code>{shorten_content}</code>」已经上架发布。
             
-        🔗 <a href="{resource_board_url}">资源上架版块</a>。
-
         🔗 <a href="{resource_url}">资源连结</a>。
 
         如果连结失效，需要请您先加入<code>贤师楼</code>。
@@ -3025,6 +3023,7 @@ async def _send_to_topic(content_id:int):
             review_status = review_status_json.get("review_status")
             if review_status is not None:
                 await AnanBOTPool.set_product_review_status(content_id, review_status)
+            
             if review_status_json.get("result_send"):
                 return review_status_json.get("result_send")
         except Exception as e:

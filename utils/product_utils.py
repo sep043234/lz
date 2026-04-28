@@ -174,58 +174,60 @@ async def submit_resource_to_chat_action(content_id: int, bot: Optional[Bot] = N
 
         review_status = None
         
-        # 发送到 guild 频道
-        if content and tpl_data.get("guild_chat_id"):
-            print(f"🏄 准备发送到贤师楼(讨论)频道 {tpl_data['guild_chat_id']}", flush=True)
-            retGuild = await _bot.send_message(
-                chat_id=tpl_data["guild_chat_id"],
-                message_thread_id=tpl_data.get("guild_thread_id"),
-                text=content,
-                parse_mode="HTML",
-                reply_markup=kb
-            )
+        ### 发送到 guild 频道
+        # if content and tpl_data.get("guild_chat_id"):
+        #     print(f"🏄 准备发送到贤师楼(讨论)频道 {tpl_data['guild_chat_id']}", flush=True)
+        #     retGuild = await _bot.send_message(
+        #         chat_id=tpl_data["guild_chat_id"],
+        #         message_thread_id=tpl_data.get("guild_thread_id"),
+        #         text=content,
+        #         parse_mode="HTML",
+        #         reply_markup=kb
+        #     )
 
-            try:
-                await _bot.pin_chat_message(
-                    chat_id=int(tpl_data["guild_chat_id"]),
-                    message_id=int(retGuild.message_id),
-                    disable_notification=True,
-                )
-                print("  📌 已置顶贤师楼(讨论)频道消息", flush=True)
-            except Exception as pin_e:
-                print(f"  ⚠️ 贤师楼消息发送成功，但置顶失败: {pin_e}", flush=True)
+        #     try:
+        #         await _bot.pin_chat_message(
+        #             chat_id=int(tpl_data["guild_chat_id"]),
+        #             message_id=int(retGuild.message_id),
+        #             disable_notification=True,
+        #         )
+        #         print("  📌 已置顶贤师楼(讨论)频道消息", flush=True)
+        #     except Exception as pin_e:
+        #         print(f"  ⚠️ 贤师楼消息发送成功，但置顶失败: {pin_e}", flush=True)
 
 
-            print(f"  ✅ 发送到贤师楼(讨论)频道成功", flush=True)
+        #     print(f"  ✅ 发送到贤师楼(讨论)频道成功", flush=True)
 
     except Exception as e:
         print(f"  ❌ 发送到贤师楼(讨论)频道失败1: {e}", flush=True)
 
 
-    try:
-        if content and tpl_data.get("guild_chat_id") != -1001926574189:
+
+    # ### 发送到学院的资源区
+    # try:
+    #     if content and tpl_data.get("guild_chat_id") != -1001926574189:
  
-            retGuild = await _bot.send_message(
-                chat_id=-1001926574189,
-                message_thread_id=2120,
-                text=content,
-                parse_mode="HTML",
-                reply_markup=kb
-            )
-            try:
-                await _bot.pin_chat_message(
-                    chat_id=-1001926574189,
-                    message_id=int(retGuild.message_id)
-                )
-                print("  📌 已置顶萨莱区消息", flush=True)
-            except Exception as pin_e:
-                print(f"  ⚠️ 萨莱区消息发送成功，但置顶失败: {pin_e}", flush=True)
-            print(f"  ✅ 发送到萨莱区成功", flush=True)
+    #         retGuild = await _bot.send_message(
+    #             chat_id=-1001926574189,
+    #             message_thread_id=2120,
+    #             text=content,
+    #             parse_mode="HTML",
+    #             reply_markup=kb
+    #         )
+    #         try:
+    #             await _bot.pin_chat_message(
+    #                 chat_id=-1001926574189,
+    #                 message_id=int(retGuild.message_id)
+    #             )
+    #             print("  📌 已置顶萨莱区消息", flush=True)
+    #         except Exception as pin_e:
+    #             print(f"  ⚠️ 萨莱区消息发送成功，但置顶失败: {pin_e}", flush=True)
+    #         print(f"  ✅ 发送到萨莱区成功", flush=True)
     
-    except Exception as e:
-        print(f"  ❌ 发送到萨莱区失败: {e}", flush=True)
+    # except Exception as e:
+    #     print(f"  ❌ 发送到萨莱区失败: {e}", flush=True)
 
-
+    ### 推播频道
     await MySQLPool.init_pool()  # ✅ 初始化 MySQL 连接池
     try:
         print(f"🏄 准备发送到推播频道", flush=True)
@@ -245,33 +247,33 @@ async def submit_resource_to_chat_action(content_id: int, bot: Optional[Bot] = N
         await MySQLPool.close()
 
 
-
-    try:
-        # 发送到资源频道
-        if tpl_data.get("guild_resource_chat_id"):
+    ### 鲁馆
+    # try:
+    #     # 发送到资源频道
+    #     if tpl_data.get("guild_resource_chat_id"):
            
-            print(
-                f"🏄 准备发送到(撸馆)资源频道 C={tpl_data['guild_resource_chat_id']} "
-                f"T={tpl_data.get('guild_resource_thread_id')}",
-                flush=True
-            )
+    #         print(
+    #             f"🏄 准备发送到(撸馆)资源频道 C={tpl_data['guild_resource_chat_id']} "
+    #             f"T={tpl_data.get('guild_resource_thread_id')}",
+    #             flush=True
+    #         )
 
-            retResource = await _bot.send_message(
-                chat_id=tpl_data["guild_resource_chat_id"],
-                message_thread_id=tpl_data.get("guild_resource_thread_id"),
-                text=content,
-                parse_mode="HTML",
-                reply_markup=kb
-            )
-            review_status = 9
+    #         retResource = await _bot.send_message(
+    #             chat_id=tpl_data["guild_resource_chat_id"],
+    #             message_thread_id=tpl_data.get("guild_resource_thread_id"),
+    #             text=content,
+    #             parse_mode="HTML",
+    #             reply_markup=kb
+    #         )
+    #         review_status = 9
             
             
-            print(f"  ✅ 准备发送到(撸馆)资源频道成功", flush=True)
+    #         print(f"  ✅ 准备发送到(撸馆)资源频道成功", flush=True)
             
-            # //g.guild_resource_chat_id, g.guild_resource_thread_id, g.guild_chat_id, g.guild_thread_id 
+    #         # //g.guild_resource_chat_id, g.guild_resource_thread_id, g.guild_chat_id, g.guild_thread_id 
         
-    except Exception as e:
-        print(f"  ❌ 准备发送到(撸馆)资源频道失败2: {e}", flush=True)
+    # except Exception as e:
+    #     print(f"  ❌ 准备发送到(撸馆)资源频道失败2: {e}", flush=True)
     
     return {'review_status': review_status , 'result_send': retGuild}
 
