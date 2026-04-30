@@ -9,7 +9,7 @@ from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.errors.rpcerrorlist import ChatForwardsRestrictedError
 
-from man_config import API_HASH, API_ID, SESSION_STRING
+from man_config import API_HASH, API_ID, SESSION_STRING, FORWARDER_RUN_TARGET
 
 
 def _build_client() -> TelegramClient:
@@ -53,8 +53,16 @@ async def run_health_server() -> None:
 
 
 async def main() -> None:
+	if FORWARDER_RUN_TARGET in {"1", "forwarder_dy"}:
+		selected_forwarder = forwarder_dy
+		selected_name = "forwarder_dy"
+	else:
+		selected_forwarder = forwarder_th
+		selected_name = "forwarder_th"
+
+	print(f"[Boot] selected forwarder: {selected_name}", flush=True)
 	await asyncio.gather(
-		forwarder.run(),
+		selected_forwarder.run(),
 		run_health_server(),
 	)
 
@@ -433,7 +441,7 @@ class GroupMediaForwarder:
 
 # ── 实例配置 ──────────────────────────────────────────────────
 
-forwarder = GroupMediaForwarder(
+forwarder_dy = GroupMediaForwarder(
 	target_group=-1001907741385,
 	forward_to="ziyuanbudengbot",
 	start_message_id=3422698,
@@ -458,7 +466,7 @@ forwarder = GroupMediaForwarder(
 	],
 )
 
-forwarder2 = GroupMediaForwarder(
+forwarder_th = GroupMediaForwarder(
 	target_group=7294369541,
 	forward_to="Tin9HutBot",
 	start_message_id=255,
