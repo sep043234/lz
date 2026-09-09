@@ -354,7 +354,7 @@ class BotScripts:
 
 			reply_text = getattr(reply, "message", None) or ""
 			print(f"[AiYYnvshen_bot] 签到回复内容: {reply_text!r}", flush=True)
-
+ 
 	@staticmethod
 	async def script_ainudem2bot() -> None:
 		await BotScripts._send_only("@ainudem2bot", "签到")
