@@ -360,8 +360,8 @@ class BotScripts:
 		await BotScripts._send_only("@ainudem2bot", "签到")
 
 	@staticmethod
-	async def script_fileposterprobot() -> None:
-		await BotScripts._send_only("@fileposterprobot", "/checkin")
+	async def script_posterre_bot() -> None:
+		await BotScripts._send_only("@posterre_bot", "/checkin")
 
 	@staticmethod
 	async def script_AIVision1111_bot_bot() -> None:
@@ -419,8 +419,8 @@ class BotScripts:
 		try:
 			user_id = BotScripts._user_info.id
 			for _ in range(2):
-				await client(UpdateProfileRequest(about=f"https://t.me/tangest_jaogidnv_bot?start=ref_{user_id}"))
-				print(f"[tangest_jaogidnv_bot] bio 已设置 https://t.me/tangest_jaogidnv_bot?start=ref_{user_id}", flush=True)
+				await client(UpdateProfileRequest(about=f"便宜好用全能去衣视频bot\n点击即可体验\nhttps://gaoren.me?start=ref_{user_id}"))
+				print(f"[tangest_jaogidnv_bot] bio 已设置 便宜好用全能去衣视频bot\n点击即可体验\nhttps://gaoren.me?start=ref_{user_id}", flush=True)
 				await asyncio.sleep(15)
 				entity = await client.get_entity("@tangest_jaogidnv_bot")
 				sent = await client.send_message(entity=entity, message="📅 签到")
@@ -668,7 +668,7 @@ BOT_SCRIPTS: dict[str, object] = {
 	"@XXHL9Bot": BotScripts.script_xxhl9bot,
 	"@AiYYnvshen_bot": BotScripts.script_aiyynvshen_bot,
 	"@ainudem2bot": BotScripts.script_ainudem2bot,
-	"@fileposterprobot": BotScripts.script_fileposterprobot,
+	"@posterre_bot": BotScripts.script_posterre_bot,
 	"@AIVision1111_bot": BotScripts.script_AIVision1111_bot_bot,
 	"@HuuY2024_bot": BotScripts.script_huuy2024_bot,
 	"@tangest_jaogidnv_bot": BotScripts.script_tangest_jaogidnv_bot,
