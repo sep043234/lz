@@ -1558,8 +1558,8 @@ class BotScripts:
 		await BotScripts._send_only("@tuoyi03bot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_quyi198bot() -> None:
-		await BotScripts._send_only("@quyi198bot", "🌍 每日签到")
+	async def script_quyi199bot() -> None:
+		await BotScripts._send_only("@quyi199bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_linglongai_4bot() -> None:
@@ -1742,7 +1742,7 @@ BOT_SCRIPTS: dict[str, object] = {
 	"@tuoyi55bot": BotScripts.script_tuoyi55bot,
 	"@tuoyi235bot": BotScripts.script_tuoyi235bot,
 	"@tuoyi03bot": BotScripts.script_tuoyi03bot,
-	"@quyi198bot": BotScripts.script_quyi198bot,
+	"@quyi199bot": BotScripts.script_quyi199bot,
 	"@tangest4_bot": BotScripts.script_tangest4_bot,
 	"@ccccc000_bot": BotScripts.script_ccccc000_bot,
 	"@linglongai_4bot": BotScripts.script_linglongai_4bot,
