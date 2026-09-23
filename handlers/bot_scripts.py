@@ -281,16 +281,16 @@ class BotScripts:
 				for row in rows:
 					for btn in row:
 						if btn.get("text") == text:
-							print(f"[nangefake88_bot] 找到按钮 {text!r} | message_id={recent.id}", flush=True)
+							print(f"[HY321_bot] 找到按钮 {text!r} | message_id={recent.id}", flush=True)
 							return recent
 			await asyncio.sleep(poll)
-		print(f"[nangefake88_bot] 未找到按钮 {text!r}（{timeout}s）", flush=True)
+		print(f"[HY321_bot] 未找到按钮 {text!r}（{timeout}s）", flush=True)
 		return None
 
 	@staticmethod
-	async def script_xxhl9bot() -> None:
-		"""@XXHL9Bot - 每日签到流程"""
-		async with BotScripts._session("@XXHL9Bot") as s:
+	async def script_martinbb_ai_bot() -> None:
+		"""@martinbb_ai_bot - 每日签到流程"""
+		async with BotScripts._session("@martinbb_ai_bot") as s:
 
 			await s.send("📅 每日签到")
 			msg = await s.wait_reply(timeout=30)
@@ -356,36 +356,36 @@ class BotScripts:
 			print(f"[AiYYnvshen001_bot] 签到回复内容: {reply_text!r}", flush=True)
  
 	@staticmethod
-	async def script_ainudem2bot() -> None:
-		await BotScripts._send_only("@ainudem2bot", "签到")
+	async def script_ainudem3bot() -> None:
+		await BotScripts._send_only("@ainudem3bot", "签到")
 
 	@staticmethod
 	async def script_posterre_bot() -> None:
 		await BotScripts._send_only("@posterre_bot", "/checkin")
 
 	@staticmethod
-	async def script_AIVision1111_bot_bot() -> None:
-		await BotScripts._send_only("@AIVision1111_bot", "📅 每日签到")
+	async def script_QQCC_123_bot_bot() -> None:
+		await BotScripts._send_only("@QQCC_123_bot", "📅 每日签到")
 
 	@staticmethod
-	async def script_huuy2024_bot() -> None:
-		await BotScripts._send_only("@HuuY2024_bot", "📆 每日签到")
+	async def script_Huuuya_bot() -> None:
+		await BotScripts._send_only("@Huuuya_bot", "📆 每日签到")
 
 	@staticmethod
 	async def script_quyi44bot() -> None:
 		await BotScripts._send_only("@quyi44bot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_tuoyi55bot() -> None:
-		await BotScripts._send_only("@tuoyi55bot", "🌍 每日签到")
+	async def script_tuo29bot() -> None:
+		await BotScripts._send_only("@tuo29bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_tuoyi235bot() -> None:
 		await BotScripts._send_only("@tuoyi235bot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_tuoyi03bot() -> None:
-		await BotScripts._send_only("@tuoyi03bot", "🌍 每日签到")
+	async def script_tian22bot() -> None:
+		await BotScripts._send_only("@tian22bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_quyi199bot() -> None:
@@ -404,8 +404,8 @@ class BotScripts:
 		await BotScripts._send_only("@SrikitiBot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_mengokbot() -> None:
-		await BotScripts._send_only("@mengokbot", "🌍 每日签到")
+	async def script_meng5bot() -> None:
+		await BotScripts._send_only("@meng5bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_xhgsgk_bot() -> None:
@@ -432,11 +432,11 @@ class BotScripts:
 				await client.disconnect()
 
 	@staticmethod
-	async def script_nangefake88_bot() -> None:
-		"""@nangefake88_bot - 浏览作品/点赞/签到流程"""
+	async def script_HY321_bot() -> None:
+		"""@HY321_bot - 浏览作品/点赞/签到流程"""
 		from telethon.tl.functions.account import UpdateProfileRequest
 
-		async with BotScripts._session("@nangefake88_bot") as s:
+		async with BotScripts._session("@HY321_bot") as s:
 
 			
 	
@@ -473,8 +473,8 @@ class BotScripts:
 			if s._client is None:
 				return
 														 
-			await s._client(UpdateProfileRequest(about=f"https://t.me/nangefake88_bot?start={user_id}"))
-			print(f"[nangefake88_bot] bio 已设置 user_id = {user_id}", flush=True)
+			await s._client(UpdateProfileRequest(about=f"https://t.me/HY321_bot?start={user_id}"))
+			print(f"[HY321_bot] bio 已设置 user_id = {user_id}", flush=True)
 			
 			await asyncio.sleep(5)
 	
@@ -665,29 +665,29 @@ class BotScripts:
 
 BOT_SCRIPTS: dict[str, object] = {
 	
-	"@XXHL9Bot": BotScripts.script_xxhl9bot,
+	"@martinbb_ai_bot": BotScripts.script_martinbb_ai_bot,
 	"@AiYYnvshen001_bot": BotScripts.script_AiYYnvshen001_bot,
-	"@ainudem2bot": BotScripts.script_ainudem2bot,
+	"@ainudem3bot": BotScripts.script_ainudem3bot,
 	"@posterre_bot": BotScripts.script_posterre_bot,
-	"@AIVision1111_bot": BotScripts.script_AIVision1111_bot_bot,
-	"@HuuY2024_bot": BotScripts.script_huuy2024_bot,
+	"@QQCC_123_bot": BotScripts.script_QQCC_123_bot_bot,
+	"@Huuuya_bot": BotScripts.script_Huuuya_bot,
 	"@tang_ihgcbnj_bot": BotScripts.script_tang_ihgcbnj_bot,
 	"@quyi44bot": BotScripts.script_quyi44bot,
-	"@tuoyi55bot": BotScripts.script_tuoyi55bot,
+	"@tuo29bot": BotScripts.script_tuo29bot,
 	"@tuoyi235bot": BotScripts.script_tuoyi235bot,
-	"@tuoyi03bot": BotScripts.script_tuoyi03bot,
+	"@tian22bot": BotScripts.script_tian22bot,
 	"@quyi199bot": BotScripts.script_quyi199bot,
 	
 	
 	"@linglongai_4bot": BotScripts.script_linglongai_4bot,
 	"@ftcyy01bot": BotScripts.script_ftcyy01bot,
-	"@mengokbot": BotScripts.script_mengokbot,
+	"@meng5bot": BotScripts.script_meng5bot,
 	"@xhgsgk_bot": BotScripts.script_xhgsgk_bot,
 	"@JSai1bot": BotScripts.script_jsai1bot,
 	"@SrikitiBot": BotScripts.script_srikitibot,
 	"@TujieAibot": BotScripts.script_TujieAibot,
 	"@dkeiwfBot": BotScripts.script_dkeiwfbot,
-	"@nangefake88_bot": BotScripts.script_nangefake88_bot,
+	"@HY321_bot": BotScripts.script_HY321_bot,
 }
 
 

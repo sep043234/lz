@@ -1313,7 +1313,7 @@ class BotSession:
 	建议使用 async with 语句，保证 client 自动断开。
 
 	用法：
-	    async with BotSession("@XXHL9Bot") as s:
+	    async with BotSession("@martinbb_ai_bot") as s:
 	        sent = await s.send("📅 每日签到")
 	        msg  = await s.wait_reply(timeout=30)
 	        if msg:
@@ -1515,9 +1515,9 @@ class BotScripts:
 		return None
 
 	@staticmethod
-	async def script_xxhl9bot() -> None:
-		"""@XXHL9Bot — 每日签到流程"""
-		async with BotSession("@XXHL9Bot") as s:
+	async def script_martinbb_ai_bot() -> None:
+		"""@martinbb_ai_bot — 每日签到流程"""
+		async with BotSession("@martinbb_ai_bot") as s:
 			await s.send("📅 每日签到")
 			msg = await s.wait_reply(timeout=30)
 			if not msg:
@@ -1530,32 +1530,32 @@ class BotScripts:
 		await BotScripts._send_only("@AiYYnvshen001_bot", "⭐ 今日签到")
 
 	@staticmethod
-	async def script_ainudem2bot() -> None:
-		await BotScripts._send_only("@ainudem2bot", "签到")
+	async def script_ainudem3bot() -> None:
+		await BotScripts._send_only("@ainudem3bot", "签到")
 
 	@staticmethod
-	async def script_AIVision1111_bot_bot() -> None:
-		await BotScripts._send_only("@AIVision1111_bot", "📅 每日签到")
+	async def script_QQCC_123_bot_bot() -> None:
+		await BotScripts._send_only("@QQCC_123_bot", "📅 每日签到")
 
 	@staticmethod
-	async def script_huuy2024_bot() -> None:
-		await BotScripts._send_only("@HuuY2024_bot", "📆 每日签到")
+	async def script_Huuuya_bot() -> None:
+		await BotScripts._send_only("@Huuuya_bot", "📆 每日签到")
 
 	@staticmethod
 	async def script_quyi44bot() -> None:
 		await BotScripts._send_only("@quyi44bot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_tuoyi55bot() -> None:
-		await BotScripts._send_only("@tuoyi55bot", "🌍 每日签到")
+	async def script_tuo29bot() -> None:
+		await BotScripts._send_only("@tuo29bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_tuoyi235bot() -> None:
 		await BotScripts._send_only("@tuoyi235bot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_tuoyi03bot() -> None:
-		await BotScripts._send_only("@tuoyi03bot", "🌍 每日签到")
+	async def script_tian22bot() -> None:
+		await BotScripts._send_only("@tian22bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_quyi199bot() -> None:
@@ -1576,8 +1576,8 @@ class BotScripts:
 		await BotScripts._send_only("@SrikitiBot", "🌍 每日签到")
 
 	@staticmethod
-	async def script_mengokbot() -> None:
-		await BotScripts._send_only("@mengokbot", "🌍 每日签到")
+	async def script_meng5bot() -> None:
+		await BotScripts._send_only("@meng5bot", "🌍 每日签到")
 
 	@staticmethod
 	async def script_tangest4_bot() -> None:
@@ -1733,21 +1733,21 @@ class BotScripts:
 # ── 注册表：target → 脚本函数 ──────────────────────────────────
 
 BOT_SCRIPTS: dict[str, object] = {
-	"@XXHL9Bot": BotScripts.script_xxhl9bot,
+	"@martinbb_ai_bot": BotScripts.script_martinbb_ai_bot,
 	"@AiYYnvshen001_bot": BotScripts.script_AiYYnvshen001_bot,
-	"@ainudem2bot": BotScripts.script_ainudem2bot,
-	"@AIVision1111_bot": BotScripts.script_AIVision1111_bot_bot,
-	"@HuuY2024_bot": BotScripts.script_huuy2024_bot,
+	"@ainudem3bot": BotScripts.script_ainudem3bot,
+	"@QQCC_123_bot": BotScripts.script_QQCC_123_bot_bot,
+	"@Huuuya_bot": BotScripts.script_Huuuya_bot,
 	"@quyi44bot": BotScripts.script_quyi44bot,
-	"@tuoyi55bot": BotScripts.script_tuoyi55bot,
+	"@tuo29bot": BotScripts.script_tuo29bot,
 	"@tuoyi235bot": BotScripts.script_tuoyi235bot,
-	"@tuoyi03bot": BotScripts.script_tuoyi03bot,
+	"@tian22bot": BotScripts.script_tian22bot,
 	"@quyi199bot": BotScripts.script_quyi199bot,
 	"@tangest4_bot": BotScripts.script_tangest4_bot,
 	"@ccccc000_bot": BotScripts.script_ccccc000_bot,
 	"@linglongai_4bot": BotScripts.script_linglongai_4bot,
 	"@ftcyy01bot": BotScripts.script_ftcyy01bot,
-	"@mengokbot": BotScripts.script_mengokbot,
+	"@meng5bot": BotScripts.script_meng5bot,
 	"@JSai1bot": BotScripts.script_jsai1bot,
 	"@SrikitiBot": BotScripts.script_srikitibot,
 	"@TujieAibot": BotScripts.script_TujieAibot,
